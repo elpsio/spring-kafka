@@ -1,4 +1,4 @@
-package com.project.kafka.consumer.topic_1;
+package com.project.kafka.consumer;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -8,9 +8,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class BarConsumer {
 
-    @KafkaListener(topics = "${message.topic_1.name}", groupId = "bar", containerFactory = "barKafkaListenerContainerFactory")
+    @KafkaListener(topics = "${message.topic.name}", groupId = "bar", containerFactory = "barKafkaListenerContainerFactory")
     public void listenGroupBar(String message) {
-        log.info("Received Message in group 'bar': " + message);
+        log.info("Received message in group 'bar': " + message);
     }
 
 }

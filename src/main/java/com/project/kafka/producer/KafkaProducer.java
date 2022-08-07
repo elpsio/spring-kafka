@@ -20,18 +20,20 @@ public class KafkaProducer {
 
     public void sendMessage(KafkaTopic kafkaTopic) {
 
-        ListenableFuture<SendResult<String, String>> future = kafkaTemplate.send(kafkaTopic.topic(), kafkaTopic.message());
+        log.info("Sending data=[" + kafkaTopic.data() + "] with topic=[" + kafkaTopic.topic() + "]");
+
+        ListenableFuture<SendResult<String, String>> future = kafkaTemplate.send(kafkaTopic.topic(), kafkaTopic.partition(), kafkaTopic.key(), kafkaTopic.data());
 
         future.addCallback(new ListenableFutureCallback<>() {
             @Override
             public void onSuccess(SendResult<String, String> result) {
-                log.info("Sent message=[" + kafkaTopic.message() + "] with topic=[" + kafkaTopic.topic() + "] and offset=[" + result.getRecordMetadata()
+                log.info("Sent data=[" + kafkaTopic.data() + "] with topic=[" + kafkaTopic.topic() + "] and offset=[" + result.getRecordMetadata()
                         .offset() + "]");
             }
 
             @Override
             public void onFailure(Throwable ex) {
-                log.error("Unable to send message=[" + kafkaTopic.message() + "] with topic=[" + kafkaTopic.topic() + "] due to : " + ex.getMessage());
+                log.error("Unable to send data=[" + kafkaTopic.data() + "] with topic=[" + kafkaTopic.topic() + "] due to : " + ex.getMessage());
             }
         });
 
